@@ -21,18 +21,9 @@
     ldi uprtempL, $fd
     st X+, uprtempL
 
-.nolist
-
-; high byte of front buffer address used as zero
-.if HIGH(frame_buffer_a) != $00
-.error "incorrect value in zero register"
-.endif
-
-.list
-
     ldi uprtempL, 4             ; size of clear section
 
 loop_sram_clear:
-    st X+, uprtempH             ; uprtempH == $00
+    st X+, zeroreg
     dec uprtempL
     brne loop_sram_clear

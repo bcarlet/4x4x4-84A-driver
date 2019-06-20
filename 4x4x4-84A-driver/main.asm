@@ -58,18 +58,26 @@ TIM0_OVF:
     lds XL, front_buffer
     add r16, r16
     add XL, r16                 ; a and b buffer alignment guarantees no carry
-
+    
+    ; prepare first byte for transfer
     ld r16, X+
-    spi_xfer r16
-    ld r16, X
-    spi_xfer r16
+    out USIDR, r16
 
+    ld r16, X                   ; load second byte
+
+    spi_fast_init XL, XH
+    spi_fast_xfer XL, XH        ; transfer first byte
+
+    out USIDR, r16
+
+    spi_fast_xfer XL, XH        ; transfer second byte
+    
     ; turn off all FETs and transfer serial data to LED driver latches
     ldi r16, PORTA_IDLE | (1<<LE)
     out PORTA, r16
 
     cbi PORTA, LE               ; latch drivers
-
+    
     ; toggle FET for current layer
     lds r16, layer_index
     ldi XH, 0x01
@@ -78,7 +86,7 @@ TIM0_OVF:
     sbrc r16, 0
     lsl XH
     out PINA, XH
-
+    
     lds XH, poll_history + 1
     lds XL, poll_history
     
@@ -133,6 +141,8 @@ main:
     ldi uprtempL, LOW(RAMEND)
     out SPL, uprtempL
 
+    clr zeroreg
+
     .include "raminit.asm"
 
     rcall server_init_table     ; initialize front buffer with first server
@@ -140,10 +150,6 @@ main:
     ; reinitialize back buffer pointer
     ldi uprtempL, LOW(frame_buffer_b)   ; a and b buffer addresses share common upper byte
     sts back_buffer, uprtempL
-
-    ; set USI to 3-wire mode 0
-    ldi uprtempL, (1<<USIWM0) | (1<<USICS1) | (1<<USICLK)
-    out USICR, uprtempL
 
     ; set timer0 prescaler to 64 (1 tick = 4us at 16MHz -> 1.024ms until overflow)
     ldi uprtempL, (1<<CS01) | (1<<CS00)
@@ -174,7 +180,7 @@ loop_main:
 
     ; load address of current table
     brtc PC + 3
-    sbiw ZH:ZL, server_count    ; switch to init table
+    sbiw ZH:ZL, SERVER_COUNT    ; switch to init table
     clt
 
     ; load address of current table entry

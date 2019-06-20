@@ -2,8 +2,8 @@
 ; test animation
 ;
 
-.set testsvr_byte_index = server_working_mem + 0
-.set testsvr_byte = server_working_mem + 1
+.set testsvr_byte_index = server_working_mem + 0    ; width 1
+.set testsvr_byte       = server_working_mem + 1    ; width 1
 
 .cseg
 testsvr_init:
@@ -19,10 +19,9 @@ testsvr:
     adiw XH:XL, FRAME_SIZE
 
     ldi uprtempL, FRAME_SIZE
-    clr uprtempH
 
 testsvr_clear_loop:
-    st -X, uprtempH
+    st -X, zeroreg
     dec uprtempL
     brne testsvr_clear_loop
     
