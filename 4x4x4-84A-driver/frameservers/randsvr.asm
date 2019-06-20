@@ -12,8 +12,8 @@ randsvr:
     ldi frame_byte, FRAME_SIZE
 
 randsvr_fill_loop:
-    rcall rand                  ; place pseudorandom byte in uprtempL
-    st X+, uprtempL
+    rcall rand                  ; place pseudorandom byte in r3
+    st X+, r3
     dec frame_byte
     brne randsvr_fill_loop
     
