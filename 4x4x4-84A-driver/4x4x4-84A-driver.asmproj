@@ -86,6 +86,12 @@
     <Compile Include="constdef.inc">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="frameservers\polarsvr.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="frameservers\rainsvr.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="frameservers\randsvr.asm">
       <SubType>Code</SubType>
     </Compile>

@@ -1,18 +1,20 @@
-.equ SERVER_COUNT = 2
+.equ SERVER_COUNT = 3
 
 ;
 ; server initializer jump table
 ;
 .cseg
 server_init_table:
-    rjmp testsvr_init
+    rjmp rainsvr_init
+    rjmp polarsvr_init
     rjmp randsvr_init
 
 ;
 ; frameserver jump table
 ;
 frameserver_table:
-    rjmp testsvr
+    rjmp rainsvr
+    rjmp polarsvr
     rjmp randsvr
 
 .nolist
@@ -32,5 +34,6 @@ frameserver_table:
 ;
 ; frameserver implementations
 ;
-.include "frameservers\testsvr.asm"
+.include "frameservers\rainsvr.asm"
+.include "frameservers\polarsvr.asm"
 .include "frameservers\randsvr.asm"
