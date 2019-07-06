@@ -80,9 +80,9 @@ TIM0_OVF:
     
     ; toggle FET for current layer
     lds r16, layer_index
-    ldi XH, 0x01
+    ldi XH, $01
     sbrc r16, 1
-    ldi XH, 0x04
+    ldi XH, $04
     sbrc r16, 0
     lsl XH
     out PINA, XH

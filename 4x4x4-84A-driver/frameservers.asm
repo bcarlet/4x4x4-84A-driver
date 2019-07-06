@@ -25,7 +25,7 @@ frameserver_table:
 .endif
 
 ; addresses of all frameserver table entries should share common upper byte
-.if HIGH(frameserver_table) != HIGH(frameserver_table + SERVER_COUNT- 1)
+.if HIGH(frameserver_table) != HIGH(frameserver_table + SERVER_COUNT - 1)
 .error "addresses of frameserver table entries have differing upper bytes"
 .endif
 

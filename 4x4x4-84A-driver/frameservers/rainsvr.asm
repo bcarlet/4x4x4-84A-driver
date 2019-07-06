@@ -50,17 +50,17 @@ rainsvr_shift_loop:
     
     rcall rand                  ; place pseudorandom byte in r3
     
-    ldi uprtempH, 0x01
+    ldi uprtempH, $01
     sbrc r3, 1
-    ldi uprtempH, 0x04
+    ldi uprtempH, $04
     sbrc r3, 0
     lsl uprtempH
     sbrc r3, 2
     swap uprtempH
 
-    ldi uprtempL, 0x01
+    ldi uprtempL, $01
     sbrc r3, 4
-    ldi uprtempL, 0x04
+    ldi uprtempL, $04
     sbrc r3, 3
     lsl uprtempL
     sbrc r3, 5

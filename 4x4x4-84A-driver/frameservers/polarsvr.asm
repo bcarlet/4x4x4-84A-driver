@@ -136,9 +136,9 @@ polarsvr_rise_loop:
 
     .def mask = r18
 
-    ldi mask, 0x01
+    ldi mask, $01
     sbrc r3, 1
-    ldi mask, 0x04
+    ldi mask, $04
     sbrc r3, 0
     lsl mask
     sbrc r3, 2
