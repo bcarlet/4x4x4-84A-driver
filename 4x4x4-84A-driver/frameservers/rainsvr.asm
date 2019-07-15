@@ -7,7 +7,7 @@
 
 .cseg
 rainsvr_init:
-    lds XH, back_buffer + 1
+    ldi XH, BUFFER_ADDR_HIGH
     lds XL, back_buffer
 
     ldi YH, HIGH(rainsvr_frame)
@@ -27,7 +27,7 @@ rainsvr_clear_loop:
     ret
 
 rainsvr:
-    lds XH, back_buffer + 1
+    ldi XH, BUFFER_ADDR_HIGH
     lds XL, back_buffer
 
     ldi YH, HIGH(rainsvr_frame)

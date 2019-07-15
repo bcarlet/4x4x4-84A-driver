@@ -13,7 +13,7 @@ testsvr_init:
     sts testsvr_byte, uprtempL
 
 testsvr:
-    lds XH, back_buffer + 1
+    ldi XH, BUFFER_ADDR_HIGH
     lds XL, back_buffer
 
     adiw XH:XL, FRAME_SIZE

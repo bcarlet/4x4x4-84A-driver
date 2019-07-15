@@ -10,12 +10,9 @@
     ; front buffer pointer
     ldi uprtempL, LOW(frame_buffer_a)
     st X+, uprtempL
-    ldi uprtempH, HIGH(frame_buffer_a)
-    st X+, uprtempH
 
     ; back buffer pointer (initialized to front buffer)
     st X+, uprtempL
-    st X+, uprtempH
 
     ; prng s
     ldi uprtempL, $fd

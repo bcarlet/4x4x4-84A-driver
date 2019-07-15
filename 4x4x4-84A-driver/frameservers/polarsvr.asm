@@ -8,7 +8,7 @@
 
 .cseg
 polarsvr_init:
-    lds XH, back_buffer + 1
+    ldi XH, BUFFER_ADDR_HIGH
     lds XL, back_buffer
 
     ldi YH, HIGH(polarsvr_frame)
@@ -176,7 +176,7 @@ polarsvr_rise_loop:
     ldi YL, LOW(rainsvr_frame)
 
 polarsvr_skip_initiate:
-    lds XH, back_buffer + 1
+    ldi XH, BUFFER_ADDR_HIGH
     lds XL, back_buffer
 
     ldi uprtempL, FRAME_SIZE

@@ -47,16 +47,15 @@ TIM0_OVF:
     in r16, SREG
     push r16
 
-    ; increment layer_index modulo 4
-    lds r16, layer_index
-    inc r16
-    andi r16, 0b11
-    sts layer_index, r16
+    ; advance layer offset
+    in r16, LAYER_OFFSET_IOREG
+    subi r16, -2
+    andi r16, 0b110
+    out LAYER_OFFSET_IOREG, r16
 
     ; load layer data address
-    lds XH, front_buffer + 1
+    ldi XH, BUFFER_ADDR_HIGH
     lds XL, front_buffer
-    add r16, r16
     add XL, r16                 ; a and b buffer alignment guarantees no carry
     
     ; prepare first byte for transfer
@@ -79,11 +78,11 @@ TIM0_OVF:
     cbi PORTA, LE               ; latch drivers
     
     ; toggle FET for current layer
-    lds r16, layer_index
+    in r16, LAYER_OFFSET_IOREG
     ldi XH, $01
-    sbrc r16, 1
+    sbrc r16, 2
     ldi XH, $04
-    sbrc r16, 0
+    sbrc r16, 1
     lsl XH
     out PINA, XH
     
@@ -148,7 +147,7 @@ main:
     rcall server_init_table     ; initialize front buffer with first server
 
     ; reinitialize back buffer pointer
-    ldi uprtempL, LOW(frame_buffer_b)   ; a and b buffer addresses share common upper byte
+    ldi uprtempL, LOW(frame_buffer_b)
     sts back_buffer, uprtempL
 
     ; set timer0 prescaler to 64 (1 tick = 4us at 16MHz -> 1.024ms until overflow)
@@ -203,7 +202,7 @@ timer1_capture_loop:
     lds uprtempL, front_buffer
     lds uprtempH, back_buffer
 
-    ; swap buffers (front and back buffer pointers share common upper byte)
+    ; swap buffers
     sts front_buffer, uprtempH
     sts back_buffer, uprtempL
 

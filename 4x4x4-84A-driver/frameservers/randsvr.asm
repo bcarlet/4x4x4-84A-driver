@@ -5,7 +5,7 @@
 .cseg
 randsvr_init:
 randsvr:
-    lds XH, back_buffer + 1
+    ldi XH, BUFFER_ADDR_HIGH
     lds XL, back_buffer
 
     .def frame_byte = r18

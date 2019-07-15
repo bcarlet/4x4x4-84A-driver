@@ -12,7 +12,6 @@ sram_no_init:
     frame_buffer_a: .byte 8
     frame_buffer_b: .byte 8
     server_working_mem: .byte 64
-    layer_index: .byte 1
 
 .nolist
 
@@ -28,12 +27,14 @@ sram_no_init:
 
 .list
 
+.equ BUFFER_ADDR_HIGH = HIGH(frame_buffer_a)
+
 ;
 ; init section; exact order of definitions must be maintained for initialization
 ;
 sram_init:
-    front_buffer: .byte 2
-    back_buffer: .byte 2
+    front_buffer: .byte 1       ; lower address byte only
+    back_buffer: .byte 1
     prng_s: .byte 1
 
 ;
