@@ -7,24 +7,15 @@
 
 .cseg
 rainsvr_init:
-    ldi XH, BUFFER_ADDR_HIGH
-    lds XL, back_buffer
+    ldi YH, HIGH(rainsvr_frame + 2)
+    ldi YL, LOW(rainsvr_frame + 2)
 
-    ldi YH, HIGH(rainsvr_frame)
-    ldi YL, LOW(rainsvr_frame)
-
-    ldi uprtempL, FRAME_SIZE
+    ldi uprtempL, 8
 
 rainsvr_clear_loop:
-    st X+, zeroreg
     st Y+, zeroreg
     dec uprtempL
     brne rainsvr_clear_loop
-
-    st Y+, zeroreg              ; Y points to rainsvr_next_layer
-    st Y, zeroreg
-
-    ret
 
 rainsvr:
     ldi XH, BUFFER_ADDR_HIGH
