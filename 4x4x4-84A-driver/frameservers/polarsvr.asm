@@ -5,6 +5,7 @@
 .set polarsvr_frame      = server_working_mem + 0       ; width 8
 .set polarsvr_directions = server_working_mem + 8       ; width 2
 .set polarsvr_timer      = server_working_mem + 10      ; width 1
+.set polarsvr_last_rand  = server_working_mem + 11      ; width 1
 
 .cseg
 polarsvr_init:
@@ -127,12 +128,19 @@ polarsvr_rise_loop:
 
     ldd uprtempL, Y+10          ; Y+10 points to polarsvr_timer
     inc uprtempL
-    andi uprtempL, 0b1111       ; zero set if result is $00; cleared otherwise
+    andi uprtempL, 1            ; zero set if result is $00; cleared otherwise
     std Y+10, uprtempL
 
     brne polarsvr_skip_initiate
 
     rcall rand
+
+    ldd uprtempL, Y+11          ; Y+11 points to polarsvr_last_rand
+    eor uprtempL, r3
+    andi uprtempL, $0f
+    brne PC + 2
+    com r3
+    std Y+11, r3
 
     .def mask = r18
 
