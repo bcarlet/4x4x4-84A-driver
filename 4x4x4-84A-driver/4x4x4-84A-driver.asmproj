@@ -95,6 +95,9 @@
     <Compile Include="frameservers\randsvr.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="frameservers\floatsvr.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="frameservers\testsvr.asm">
       <SubType>Code</SubType>
     </Compile>
