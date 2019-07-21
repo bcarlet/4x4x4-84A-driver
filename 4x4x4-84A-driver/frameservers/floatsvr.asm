@@ -106,9 +106,7 @@ floatsvr_rise_loop:
     com lwrtempL
     and shift_mask_a, lwrtempL
 
-    eor shift_mask_a, shift_mask_b
-    eor shift_mask_b, shift_mask_a
-    eor shift_mask_a, shift_mask_b
+    swap_regs shift_mask_a, shift_mask_b
 
     dec uprtempL
     brne floatsvr_rise_loop
@@ -151,9 +149,7 @@ floatsvr_fall_loop:
     com lwrtempL
     and shift_mask_b, lwrtempL
 
-    eor shift_mask_a, shift_mask_b
-    eor shift_mask_b, shift_mask_a
-    eor shift_mask_a, shift_mask_b
+    swap_regs shift_mask_a, shift_mask_b
 
     dec uprtempL
     brne floatsvr_fall_loop

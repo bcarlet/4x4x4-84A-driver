@@ -4,10 +4,11 @@
 
 .nolist
 .include "tn84Adef.inc"
-.include "portdef.inc"
 .include "constdef.inc"
+.include "portdef.inc"
 .include "regdef.inc"
 .include "spixfer.inc"
+.include "util.inc"
 .list
 
 .listmac

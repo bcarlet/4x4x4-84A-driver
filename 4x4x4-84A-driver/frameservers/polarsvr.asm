@@ -73,9 +73,7 @@ polarsvr_fall_loop:
     or lwrtempL, lwrtempH
     st Y+, lwrtempL
 
-    eor directions_a, directions_b
-    eor directions_b, directions_a
-    eor directions_a, directions_b
+    swap_regs directions_a, directions_b
 
     dec uprtempL
     brne polarsvr_fall_loop
@@ -97,9 +95,7 @@ polarsvr_rise_loop:
     or lwrtempH, lwrtempL
     std Y+2, lwrtempH
 
-    eor directions_a, directions_b
-    eor directions_b, directions_a
-    eor directions_a, directions_b
+    swap_regs directions_a, directions_b
 
     dec uprtempL
     brne polarsvr_rise_loop

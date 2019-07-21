@@ -67,9 +67,7 @@ rainsvr_skip_combine:
     sbrs r3, 7
     rjmp rainsvr_skip_swap
 
-    eor uprtempL, uprtempH
-    eor uprtempH, uprtempL
-    eor uprtempL, uprtempH
+    swap_regs uprtempL, uprtempH
 
 rainsvr_skip_swap:
     .def last_top_a = r20

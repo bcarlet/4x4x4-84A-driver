@@ -122,6 +122,9 @@
     <Compile Include="spixfer.inc">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util.inc">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="frameservers" />
