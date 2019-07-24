@@ -112,7 +112,7 @@ TIM0_OVF:
     lds XL, server_index
     inc XL
     cpi XL, SERVER_COUNT
-    brlo PC + 2
+    brlo PC+2
     clr XL
     sts server_index, XL
 
@@ -179,7 +179,7 @@ loop_main:
     cli
 
     ; load address of current table
-    brtc PC + 3
+    brtc PC+3
     sbiw ZH:ZL, SERVER_COUNT    ; switch to init table
     clt
 

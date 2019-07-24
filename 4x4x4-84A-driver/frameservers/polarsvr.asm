@@ -134,7 +134,7 @@ polarsvr_rise_loop:
     ldd uprtempL, Y+11          ; Y+11 points to polarsvr_last_rand
     eor uprtempL, r3
     andi uprtempL, $0f
-    brne PC + 2
+    brne PC+2
     com r3
     std Y+11, r3
 

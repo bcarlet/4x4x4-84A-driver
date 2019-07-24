@@ -14,7 +14,7 @@
 
     out USICR, @0
     sbis USISR, USIOIF
-    rjmp PC - 2
+    rjmp PC-2
 .endmacro
 
 ;

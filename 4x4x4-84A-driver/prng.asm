@@ -1,9 +1,10 @@
 ;
-; place pseudorandom byte in r3; the SREG is clobbered
+; place pseudorandom byte in r3
 ;
 .cseg
 rand:
     .def rand_return = r3
+
     lds rand_return, prng_s
 
     mov uprtempL, rand_return
