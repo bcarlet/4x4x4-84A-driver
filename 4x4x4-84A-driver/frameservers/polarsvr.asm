@@ -22,7 +22,8 @@ polarsvr_init:
     std Y+8, lwrtempL           ; Y+8 points to polarsvr_directions
     std Y+9, r3
 
-    std Y+10, zeroreg           ; Y+10 points to polarsvr_timer
+    ldi uprtempL, 1
+    std Y+10, uprtempL          ; Y+10 points to polarsvr_timer
 
     st X+, lwrtempL
     st Y+, lwrtempL
