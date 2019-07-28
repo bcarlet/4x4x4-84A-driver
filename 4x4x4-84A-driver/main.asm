@@ -48,11 +48,11 @@ TIM0_OVF:
     in r16, SREG
     push r16
 
-    ; advance layer offset
-    in r16, LAYER_OFFSET_IOREG
+    ; advance layer
+    in r16, LAYER_OFFSET
     subi r16, -2
     andi r16, 0b110
-    out LAYER_OFFSET_IOREG, r16
+    out LAYER_OFFSET, r16
 
     ; load layer data address
     ldi XH, BUFFER_ADDR_HIGH
@@ -78,14 +78,16 @@ TIM0_OVF:
 
     cbi PORTA, LE               ; latch drivers
     
-    ; toggle FET for current layer
-    in r16, LAYER_OFFSET_IOREG
+    in r16, LAYER_OFFSET
+
+    ; 2 to 4 decode
     ldi XH, $01
     sbrc r16, 2
     ldi XH, $04
     sbrc r16, 1
     lsl XH
-    out PINA, XH
+
+    out PINA, XH                ; toggle FET for current layer
     
     lds XH, poll_history + 1
     lds XL, poll_history
@@ -100,25 +102,13 @@ TIM0_OVF:
     sts poll_history + 1, XH
     sts poll_history, XL
 
-    pop r16                     ; load SREG
-
-    ; compare XH:XL and ~(1<<15)
     cpi XL, $ff                 ; carry set if XL != $ff; zero set if XL == $ff
     sbci XH, ~(1<<7)            ; zero cleared if result is not zero, otherwise clear if XL != $ff
 
-    brne skip_server_inc        ; branch if XH:XL != ~(1<<15)
+    brne PC+2                   ; branch if XH:XL != ~(1<<15)
+    sbi SOFTWARE_FLAGS, FCRF
 
-    ; rotate frameserver
-    lds XL, server_index
-    inc XL
-    cpi XL, SERVER_COUNT
-    brlo PC+2
-    clr XL
-    sts server_index, XL
-
-    ori r16, (1<<SREG_T)        ; set T flag in SREG
-
-skip_server_inc:
+    pop r16
     out SREG, r16
     pop r16
     pop XL
@@ -169,43 +159,60 @@ main:
     ldi uprtempL, (1<<WGM13) | (1<<WGM12) | (1<<CS12)
     out TCCR1B, uprtempL
 
+    sei
+
 ;
 ; main program loop
 ;
 loop_main:
     ldi ZH, HIGH(frameserver_table)
     ldi ZL, LOW(frameserver_table)
-    
-    cli
 
-    ; load address of current table
-    brtc PC+3
-    sbiw ZH:ZL, SERVER_COUNT    ; switch to init table
-    clt
-
-    ; load address of current table entry
     lds uprtempL, server_index
-    add ZL, uprtempL            ; jump table alignment guarantees no carry
 
-    sei
+    sbis SOFTWARE_FLAGS, FCRF
+    rjmp skip_server_change
+
+    ; rotate frameserver
+    inc uprtempL
+    cpi uprtempL, SERVER_COUNT
+    brlo PC+2
+    clr uprtempL
+    sts server_index, uprtempL
+
+    sbiw ZH:ZL, SERVER_COUNT    ; switch to init table
+
+    cbi SOFTWARE_FLAGS, FCRF
+    sbi SOFTWARE_FLAGS, SFDF
+
+skip_server_change:
+    add ZL, uprtempL            ; jump table alignment guarantees no carry
 
     icall                       ; call frameserver routine
 
-timer1_capture_loop:
-    ; loop until timer1 input capture flag is set
+frame_delay_loop:
+    sbic SOFTWARE_FLAGS, FCRF
+    rjmp loop_main
+
+    sbic SOFTWARE_FLAGS, SFDF
+    rjmp break_frame_delay
+
     sbis TIFR1, ICF1
-    rjmp timer1_capture_loop
+    rjmp frame_delay_loop
+
+break_frame_delay:
+    out TCNT1H, zeroreg
+    out TCNT1L, zeroreg
 
     sbi TIFR1, ICF1             ; reset flag
+    cbi SOFTWARE_FLAGS, SFDF
 
-    brts loop_main              ; don't swap buffers if frameserver has been changed
-
-    lds uprtempL, front_buffer
-    lds uprtempH, back_buffer
+    lds lwrtempL, front_buffer
+    lds lwrtempH, back_buffer
 
     ; swap buffers
-    sts front_buffer, uprtempH
-    sts back_buffer, uprtempL
+    sts front_buffer, lwrtempH
+    sts back_buffer, lwrtempL
 
     rjmp loop_main
 

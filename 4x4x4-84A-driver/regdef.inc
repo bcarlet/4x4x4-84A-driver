@@ -14,6 +14,13 @@
 ;
 ; I/O register definitions
 ;
-.equ LAYER_OFFSET_IOREG = GPIOR0
+.equ SOFTWARE_FLAGS = GPIOR0
+.equ LAYER_OFFSET = GPIOR1
+
+;
+; flag register bit definitions
+;
+.equ FCRF = 0                   ; Frameserver Change Request Flag
+.equ SFDF = 1                   ; Skip Frame Delay Flag
 
 #endif  /* _REGDEF_INC_ */
