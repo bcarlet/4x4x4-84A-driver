@@ -1,5 +1,5 @@
 ;
-; Written for ATtiny84(A) @ 16 MHz.
+; Written for ATtiny84(A) @ 16 MHz. Fuse bits: E:FF, H:DC, L:FF.
 ;
 
 .nolist
