@@ -1,5 +1,5 @@
 ;
-; Written for ATtiny84A @ 16 MHz.
+; Written for ATtiny84(A) @ 16 MHz.
 ;
 
 .nolist
@@ -102,8 +102,8 @@ TIM0_OVF:
     sts poll_history + 1, XH
     sts poll_history, XL
 
-    cpi XL, $ff                 ; carry set if XL != $ff; zero set if XL == $ff
-    sbci XH, ~(1<<7)            ; zero cleared if result is not zero, otherwise clear if XL != $ff
+    subi XL, $ff
+    sbci XH, ~(1<<7)
 
     brne PC+2                   ; branch if XH:XL != ~(1<<15)
     sbi SOFTWARE_FLAGS, FCRF
@@ -141,7 +141,7 @@ main:
     ldi uprtempL, LOW(frame_buffer_b)
     sts back_buffer, uprtempL
 
-    ; set timer0 prescaler to 64 (1 tick = 4us at 16MHz -> 1.024ms until overflow)
+    ; set timer0 prescaler to 64 (1 tick = 4us; 1.024ms until overflow)
     ldi uprtempL, (1<<CS01) | (1<<CS00)
     out TCCR0B, uprtempL
 
@@ -155,7 +155,7 @@ main:
     ldi uprtempL, LOW(TIMER1_TOP)
     out ICR1L, uprtempL
 
-    ; set timer1 prescaler to 256 (1 tick = 16us at 16MHz) and set mode to CTC with ICR1 as TOP
+    ; set timer1 prescaler to 256 (1 tick = 16us) and set mode to CTC with ICR1 as TOP
     ldi uprtempL, (1<<WGM13) | (1<<WGM12) | (1<<CS12)
     out TCCR1B, uprtempL
 
