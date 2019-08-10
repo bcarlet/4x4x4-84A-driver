@@ -120,10 +120,10 @@ TIM0_OVF:
 ;
 main:
     ; initialize PORTA
-    ldi uprtempL, DDRA_INIT
-    ldi uprtempH, PORTA_IDLE
-    out DDRA, uprtempL
-    out PORTA, uprtempH
+    ldi uprtempL, PORTA_IDLE
+    ldi uprtempH, DDRA_INIT
+    out PORTA, uprtempL
+    out DDRA, uprtempH
 
     ; initialize stack pointer
     ldi uprtempL, HIGH(RAMEND)
